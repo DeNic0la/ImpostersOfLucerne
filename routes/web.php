@@ -39,4 +39,5 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/host', function () {
 
 Route::middleware('auth:sanctum')->get('/game/rooms',[GameController::class , 'rooms']);
 Route::middleware('auth:sanctum')->get('/host/room/{roomId}/players',[GameController::class , 'rooms']);
-Route::middleware('auth:sanctum')->get('/game/room/{roomId}/join',[GameController::class , 'newPlayer']);
+Route::middleware('auth:sanctum')->post('/game/room/{roomId}/join',[GameController::class , 'newPlayer']);
+
