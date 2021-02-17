@@ -1,6 +1,9 @@
 <?php
 
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+Use App\Http\Controllers\GameController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +17,22 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
 });
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->name('dashboard');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/games', function () {
+    return Inertia::render('Player/container');
+})->name('game');
+
+Route::middleware('auth:sanctum')->get('/game/rooms',[GameController::class , 'rooms']);
+Route::middleware('auth:sanctum')->get('/host/room/{roomId}/players',[GameController::class , 'rooms']);
+Route::middleware('auth:sanctum')->get('/game/room/{roomId}/join',[GameController::class , 'newPlayer']);
