@@ -33,6 +33,10 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/games', function () {
     return Inertia::render('Player/container');
 })->name('game');
 
+Route::middleware(['auth:sanctum', 'verified'])->get('/host', function () {
+    return Inertia::render('Host/container');
+})->name('host');
+
 Route::middleware('auth:sanctum')->get('/game/rooms',[GameController::class , 'rooms']);
 Route::middleware('auth:sanctum')->get('/host/room/{roomId}/players',[GameController::class , 'rooms']);
 Route::middleware('auth:sanctum')->get('/game/room/{roomId}/join',[GameController::class , 'newPlayer']);
