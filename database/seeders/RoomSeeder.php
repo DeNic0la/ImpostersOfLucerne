@@ -15,25 +15,32 @@ class RoomSeeder extends Seeder
     public function run()
     {
         DB::table('rooms')->insert([
-          'name' => 'Spaceship'
+          'name' => 'Spaceship',
+          'state' => 0
         ]);
         DB::table('rooms')->insert([
-          'name' => 'Airport'
+          'name' => 'Airport',
+          'state' => 0
         ]);
         DB::table('rooms')->insert([
-          'name' => 'Pyongyang'
+          'name' => 'Pyongyang',
+          'state' => 0
         ]);
         DB::table('rooms')->insert([
-          'name' => 'Oa'
+          'name' => 'Oa',
+          'state' => 0
         ]);
         DB::table('rooms')->insert([
-          'name' => 'Central City'
+          'name' => 'Central City',
+          'state' => 0
         ]);
         DB::table('rooms')->insert([
-          'name' => 'Azarath'
+          'name' => 'Azarath',
+          'state' => 0
         ]);
         DB::table('rooms')->insert([
-          'name' => 'Tamaran'
+          'name' => 'Tamaran',
+          'state' => 0
         ]);
     }
 }

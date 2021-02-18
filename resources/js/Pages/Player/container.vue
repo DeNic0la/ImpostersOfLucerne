@@ -11,6 +11,11 @@
 
 
             </h2>
+
+            <game
+                :room="currentRoom"
+            />
+
         </template>
 
     </app-layout>
@@ -19,11 +24,13 @@
 <script>
     import AppLayout from '@/Layouts/AppLayout'
     import RoomSelection from './roomSelection.vue'
+    import Game from './game.vue'
     
     export default {
         components:{
             AppLayout,
             RoomSelection,
+            Game,
 
         },
          data: function () {
@@ -33,24 +40,48 @@
                 identity: [],
             }
         },
+        watch:{
+            currentRoom( val, oldVal ){
+                if(oldVal.id){
+                    this.disconnect(oldVal);
+                }
+                this.connect();
+            }
+        },
         methods:{
+            connect(){
+                if(this.currentRoom.id){
+                    let vm = this;
+                    window.echo.private("game."+this.currentRoom.id).listen('.game.confirm', e => {
+                        alert("Confirmation needed");
+                    });
+                    window.echo.private("game."+this.currentRoom.id).listen('.game.started', e => {
+                        alert("Fetch identity");
+                    });
+                }
+            },
+            disconnect(room){
+                window.Echo.leave("game."+room.id);
+            },
             getRooms(){
                 axios.get('/game/rooms')
                 .then( response =>{
                     this.Rooms = response.data;
-                    this.setRoom(response.data[0]);
+                    this.setRoom(response.data[0]);                    
                 })
                 .catch( error => {
                     console.log(error);
                 })
             },
             setRoom( room){
-                this.currentRoom = room;                
+                this.currentRoom = room;    
+                axios.post('/game/room/'+ room.id +'/join');            
             },
         },
         created(){
             this.getRooms();
-            axios.post('/game/room/'+this.currentRoom.id+'/join')
+            
+            
         }
     }
 </script>

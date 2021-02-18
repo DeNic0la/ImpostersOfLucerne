@@ -31,13 +31,15 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/games', function () {
     return Inertia::render('Player/container');
-})->name('game');
+})->name('games');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/host', function () {
     return Inertia::render('Host/container');
 })->name('host');
 
+
 Route::middleware('auth:sanctum')->get('/game/rooms',[GameController::class , 'rooms']);
-Route::middleware('auth:sanctum')->get('/host/room/{roomId}/players',[GameController::class , 'rooms']);
+Route::middleware('auth:sanctum')->get('/host/room/{roomId}/players',[GameController::class , 'players']);
 Route::middleware('auth:sanctum')->post('/game/room/{roomId}/join',[GameController::class , 'newPlayer']);
+Route::middleware('auth:sanctum')->post('host/room/{roomId}/delete',[GameController::class , 'deletePlayer']);
 
