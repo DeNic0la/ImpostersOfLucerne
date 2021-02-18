@@ -22,7 +22,7 @@ class GameController extends Controller
     }
 
     public function newPlayer( Request $request, $roomId){
-      if (DB::table('Players')->where('room_id', $roomId)->where('user_id', Auth::id())->count() == 0){
+      if (DB::table('players')->where('room_id', $roomId)->where('user_id', Auth::id())->count() == 0){
         $Player = new Player;
         $Player->user_id = Auth::id();
         $Player->room_id = $roomId;
