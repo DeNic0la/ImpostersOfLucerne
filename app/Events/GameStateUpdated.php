@@ -37,6 +37,13 @@ class GameStateUpdated implements ShouldBroadcast
     }
 
     public function broadcastAs() {
-        return 'game.confirm';
+        if ($this->room->state == 1){
+            return 'game.confirm';
+        }
+        else if ($this->room->state == 2){
+            return 'game.started';
+        }
+    return 'game.confirm';
+        
    }
 }

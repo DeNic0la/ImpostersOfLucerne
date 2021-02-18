@@ -1,6 +1,6 @@
 <template>
     <th scope="row">{{Player.user.name}}</th>
-    <td>{{Player.role}}</td>
+    <td>{{interpretPlayerRole(Player.role)}}</td>
     <td>{{getIsReady()}}</td>
     <td class=""><button @click="deletePlayer()" class="btn btn-danger text-white">Delete</button></td>
 </template>
@@ -19,6 +19,22 @@
             },
             deletePlayer(){    
                 this.$emit('playerDeleted');
+            },
+            interpretPlayerRole($seRole){
+                if ($seRole == 1){
+                    return "Crewmate";
+                }else if($seRole == 2){
+                    return "Imposter";
+                }else if($seRole == 3){
+                    return "Security";
+                }else if($seRole == 4){
+                    return "Vitals";
+                }else if($seRole == 5){
+                    return "Admin";  
+                }
+                else{
+                    return $seRole;
+                }
             }
         }
     }

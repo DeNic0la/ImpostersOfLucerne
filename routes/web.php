@@ -37,9 +37,13 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/host', function () {
     return Inertia::render('Host/container');
 })->name('host');
 
-
 Route::middleware('auth:sanctum')->get('/game/rooms',[GameController::class , 'rooms']);
 Route::middleware('auth:sanctum')->get('/host/room/{roomId}/players',[GameController::class , 'players']);
 Route::middleware('auth:sanctum')->post('/game/room/{roomId}/join',[GameController::class , 'newPlayer']);
-Route::middleware('auth:sanctum')->post('host/room/{roomId}/delete',[GameController::class , 'deletePlayer']);
+Route::middleware('auth:sanctum')->post('/host/room/{roomId}/delete',[GameController::class , 'deletePlayer']);
+Route::middleware('auth:sanctum')->post('/host/room/{roomId}/collectPlayers',[GameController::class , 'playerReadyConfirm']);
+Route::middleware('auth:sanctum')->post('/game/room/{roomId}/confirmSelf',[GameController::class , 'confirmSelf']);
+Route::middleware('auth:sanctum')->post('/host/room/{roomId}/resetRoom',[GameController::class , 'resestRoom']);
+Route::middleware('auth:sanctum')->post('/host/room/{roomId}/startGame',[GameController::class , 'startGame']);
+Route::middleware('auth:sanctum')->get('/game/room/{roomId}/identity',[GameController::class , 'getOwnIdentity']);
 

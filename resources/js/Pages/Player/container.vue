@@ -3,21 +3,22 @@
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 <room-selection 
-                    v-if="currentRoom.id"
-                    :rooms="Rooms"
-                    :currentRoom="currentRoom"
+                    v-if="currentRoom.id" 
+                    :rooms="Rooms" 
+                    :currentRoom="currentRoom" 
                     v-on:roomchanged="setRoom($event)"
                 />
 
 
             </h2>
 
-            <game
-                :room="currentRoom"
-            />
+           
 
         </template>
 
+            <identity-display 
+                :identity="identity"
+            />
     </app-layout>
 </template>
 
@@ -25,19 +26,21 @@
     import AppLayout from '@/Layouts/AppLayout'
     import RoomSelection from './roomSelection.vue'
     import Game from './game.vue'
+    import IdentityDisplay from './identityDisplay.vue'
     
     export default {
         components:{
             AppLayout,
             RoomSelection,
             Game,
-
+            IdentityDisplay
         },
-         data: function () {
+        data: function () {
             return{
                 Rooms: [],
                 currentRoom: [],
-                identity: [],
+                identity: 0,
+                gameStage: 0,
             }
         },
         watch:{
@@ -52,11 +55,15 @@
             connect(){
                 if(this.currentRoom.id){
                     let vm = this;
-                    window.echo.private("game."+this.currentRoom.id).listen('.game.confirm', e => {
-                        alert("Confirmation needed");
+                    window.Echo.private("game."+this.currentRoom.id).listen('.game.confirm', e => {
+                        this.gameStage = 1;
+                        axios.post('/game/room/'+this.currentRoom.id+'/confirmSelf');
                     });
-                    window.echo.private("game."+this.currentRoom.id).listen('.game.started', e => {
-                        alert("Fetch identity");
+                    window.Echo.private("game."+this.currentRoom.id).listen('.game.started', e => {
+                        this.gameStage = 2;
+                        axios.get('/game/room/'+ this.currentRoom.id +'/identity').then(response => {
+                            this.identity = response.data;
+                        }).catch(error => {console.log(error);})
                     });
                 }
             },

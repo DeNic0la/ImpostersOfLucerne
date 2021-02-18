@@ -8,7 +8,6 @@
                     :currentRoom="currentRoom"
                     v-on:roomchanged="setRoom($event)"
                 />
-
                 
             </h2>
         </template>
@@ -35,6 +34,10 @@
                     </tbody>
                 </table>
             </div>
+            <controller
+                :room="currentRoom"
+                v-on:refresh="getPlayers(currentRoom)"
+            />
         </div>
     </app-layout>
 </template>
@@ -43,6 +46,7 @@
     import AppLayout from '@/Layouts/AppLayout'
     import RoomSelection from '../Player/roomSelection.vue'
     import Player from './player.vue'
+    import Controller from './controller.vue'
 
 
 
@@ -51,9 +55,9 @@
             AppLayout,
             RoomSelection,
             Player,
-
+            Controller,
         },
-         data: function () {
+        data: function () {
             return{
                 Rooms: [],
                 currentRoom: [],
