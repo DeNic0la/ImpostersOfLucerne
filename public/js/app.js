@@ -17917,14 +17917,19 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     interpretPlayerRole: function interpretPlayerRole($seRole) {
       if ($seRole == 1) {
+        this.RoleImage = '/crewmate.png';
         return "Crewmate";
       } else if ($seRole == 2) {
+        this.RoleImage = '/imposter.png';
         return "Imposter";
       } else if ($seRole == 3) {
+        this.RoleImage = '/security.png';
         return "Security";
       } else if ($seRole == 4) {
+        this.RoleImage = '/vitals.png';
         return "Vitals";
       } else if ($seRole == 5) {
+        this.RoleImage = '/admin.png';
         return "Admin";
       } else {
         return "Undefined: " + $seRole;
@@ -17933,7 +17938,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      RoleImage: 'img/duude.png'
+      RoleImage: '/crewmate.png'
     };
   }
 });
@@ -22078,21 +22083,48 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 var _hoisted_1 = {
-  "class": "container"
+  "class": "container-md"
 };
 var _hoisted_2 = {
   key: 0,
-  "class": "d-flex flex-column justify-content-around"
+  "class": "card mt-5"
+};
+var _hoisted_3 = {
+  "class": "card-body"
+};
+var _hoisted_4 = {
+  "class": "card-title"
+};
+var _hoisted_5 = {
+  key: 0,
+  "class": "card-text"
+};
+var _hoisted_6 = {
+  key: 1,
+  "class": "card-text"
+};
+var _hoisted_7 = {
+  key: 2,
+  "class": "card-text"
+};
+var _hoisted_8 = {
+  key: 3,
+  "class": "card-text"
+};
+var _hoisted_9 = {
+  key: 4,
+  "class": "card-text"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_1, [this.identity ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.interpretPlayerRole(this.identity)) + " ", 1
-  /* TEXT */
-  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("img", {
-    src: _ctx.RoleImage,
-    alt: "Rolle{{this.identity}}"
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_1, [this.identity ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("img", {
+    src: 'img/rolePictures' + _ctx.RoleImage,
+    "class": "card-img-top",
+    alt: 'Rolle' + this.identity
   }, null, 8
   /* PROPS */
-  , ["src"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
+  , ["src", "alt"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("h5", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.interpretPlayerRole(this.identity)), 1
+  /* TEXT */
+  ), this.identity == 1 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("p", _hoisted_5, "Crewmate discription")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), this.identity == 2 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("p", _hoisted_6, "Imposter discription")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), this.identity == 3 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("p", _hoisted_7, "Security discription")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), this.identity == 4 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("p", _hoisted_8, "Vitals discription")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), this.identity == 5 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("p", _hoisted_9, "Admin discription")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
 }
 
 /***/ }),
