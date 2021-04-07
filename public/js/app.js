@@ -17711,6 +17711,11 @@ __webpack_require__.r(__webpack_exports__);
     collectPlayers: function collectPlayers() {
       axios.post('/host/room/' + this.room.id + '/collectPlayers');
       this.stage = 1;
+      var vm = this;
+      vm.refreshRows();
+      setTimeout(function () {
+        vm.refreshRows();
+      }, 5000);
     },
     refreshRows: function refreshRows() {
       this.$emit('refresh');
@@ -17723,10 +17728,18 @@ __webpack_require__.r(__webpack_exports__);
         vitals: this.vitals,
         admin: this.admin
       });
+      var vm = this;
+      setTimeout(function () {
+        vm.refreshRows();
+      }, 3000);
     },
     resetRoom: function resetRoom() {
       this.stage = 0;
       axios.post('/host/room/' + this.room.id + '/resetRoom');
+      var vm = this;
+      setTimeout(function () {
+        vm.refreshRows();
+      }, 3000);
     }
   }
 });
@@ -17822,26 +17835,40 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     connect: function connect() {
-      var _this = this;
-
-      if (this.currentRoom.id) {
-        var vm = this;
-        window.Echo["private"]("game." + this.currentRoom.id).listen('.game.confirm', function (e) {
-          _this.gameStage = 1;
-          axios.post('/game/room/' + _this.currentRoom.id + '/confirmSelf');
-        });
-        window.Echo["private"]("game." + this.currentRoom.id).listen('.game.started', function (e) {
-          _this.gameStage = 2;
-          axios.get('/game/room/' + _this.currentRoom.id + '/identity').then(function (response) {
-            _this.identity = response.data;
-          })["catch"](function (error) {
-            console.log(error);
-          });
-        });
+      if (this.currentRoom.id) {//this.lobby(0);
       }
     },
+    lobby: function lobby(state) {
+      var vm = this;
+
+      if (state === 1) {
+        vm.getIdentity();
+        return;
+      }
+
+      var url = '/game/room/' + this.currentRoom.id + '/lobby';
+      axios.get(url).then(function (response) {
+        console.log(response);
+        setTimeout(function () {
+          vm.lobby(response.data);
+        }, 5000);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    getIdentity: function getIdentity() {
+      var _this = this;
+
+      var vm = this;
+      var url = '/game/room/' + this.currentRoom.id + '/identity';
+      axios.get(url).then(function (response) {
+        _this.identity = response.data;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
     disconnect: function disconnect(room) {
-      window.Echo.leave("game." + room.id);
+      axios.post('/game/room/' + room.id + '/deleteSelf');
     },
     getRooms: function getRooms() {
       var _this2 = this;
@@ -17860,7 +17887,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    this.getRooms();
+    var vm = this;
+    vm.getRooms();
+    vm.lobby(0);
   }
 });
 
@@ -21875,7 +21904,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       'btn-secondary': _ctx.stage,
       'btn-success': _ctx.stage == 0
     }, "btn btn-lg mt-5 mx-5"]
-  }, "Collect Player Readys", 2
+  }, "Lock Room", 2
   /* CLASS */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
     disabled: _ctx.stage == 0 ? true : false,
@@ -22020,10 +22049,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         currentRoom: _ctx.currentRoom,
         onRoomchanged: _cache[1] || (_cache[1] = function ($event) {
           return $options.setRoom($event);
-        })
+        }),
+        onClick: $options.getRooms
       }, null, 8
       /* PROPS */
-      , ["rooms", "currentRoom"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])];
+      , ["rooms", "currentRoom", "onClick"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])];
     }),
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_identity_display, {

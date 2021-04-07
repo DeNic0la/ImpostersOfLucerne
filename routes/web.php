@@ -38,12 +38,27 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/host', function () {
 })->name('host');
 
 Route::middleware('auth:sanctum')->get('/game/rooms',[GameController::class , 'rooms']);
+
+//HOST REQUESTS
 Route::middleware('auth:sanctum')->get('/host/room/{roomId}/players',[GameController::class , 'players']);
-Route::middleware('auth:sanctum')->post('/game/room/{roomId}/join',[GameController::class , 'newPlayer']);
 Route::middleware('auth:sanctum')->post('/host/room/{roomId}/delete',[GameController::class , 'deletePlayer']);
 Route::middleware('auth:sanctum')->post('/host/room/{roomId}/collectPlayers',[GameController::class , 'playerReadyConfirm']);
-Route::middleware('auth:sanctum')->post('/game/room/{roomId}/confirmSelf',[GameController::class , 'confirmSelf']);
 Route::middleware('auth:sanctum')->post('/host/room/{roomId}/resetRoom',[GameController::class , 'resestRoom']);
 Route::middleware('auth:sanctum')->post('/host/room/{roomId}/startGame',[GameController::class , 'startGame']);
-Route::middleware('auth:sanctum')->get('/game/room/{roomId}/identity',[GameController::class , 'getOwnIdentity']);
+
+//PLAYER REQUESTS
+Route::middleware('auth:sanctum')->post('/game/room/{roomId}/join',[GameController::class , 'newPlayer']);
+Route::middleware('auth:sanctum')->get('/game/room/{roomId}/identity',[GameController::class , 'getOwnIdentity'])->name('identity');
+Route::middleware('auth:sanctum')->get('/game/room/{roomId}/lobby',[GameController::class , 'lobby'])->name('lobby');
+Route::middleware('auth:sanctum')->post('/game/room/{roomId}/confirmSelf',[GameController::class , 'confirmSelf']);
+Route::middleware('auth:sanctum')->post('/game/room/{roomId}/deleteSelf',[GameController::class , 'deleteSelf']);
+
+
+
+
+
+
+
+
+
 

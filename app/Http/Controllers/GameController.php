@@ -17,6 +17,25 @@ class GameController extends Controller
       return Room::where('state',0)->get();
     }
 
+    public function lobby(Request  $request, $roomId){
+        if (Room::where('id',$roomId)->count() == 0)
+            return 0;
+        $this->newPlayer($request,$roomId);
+        if (DB::table('players')->where('room_id', $roomId)->where('user_id', Auth::id())->count() == 1 ){
+            $this->confirmSelf($request,$roomId);
+            $Player = Player::where('user_id', Auth::id())->where('room_id', $roomId);
+            $Room = Room::where('id', $roomId);
+            if ($Room->where('state', 2)->count() == 1){
+                return 1;
+            }
+            else
+                return 0;
+        }
+        else{
+            return 0;
+        }
+    }
+
     public function players(Request $request, $roomId){
       return Player::where('room_id', $roomId)->with('user')->get();
     }
@@ -36,8 +55,7 @@ class GameController extends Controller
     public function playerReadyConfirm(Request $request,$roomId){
       $updateRoom = Room::where('id', $roomId);
       $updateRoom->update(['state' => 1]);
-      //return ;
-      broadcast(new GameStateUpdated(Room::where('id',$roomId)->first()))->toOthers();
+      Player::where('room_id',$roomId)->delete();
 
       return 1;
 
@@ -54,9 +72,13 @@ class GameController extends Controller
     }
 
     public function confirmSelf(Request $request,$roomId){
-  
+
       Player::where('user_id', Auth::id())->where('room_id', $roomId)->update(['ready' => 1]);
       return 1;
+    }
+
+    public function deleteSelf(Request $request,$roomId){
+        Player::where('user_id', Auth::id())->where('room_id', $roomId)->delete();
     }
 
     public function startGame(Request $request, $roomId){
@@ -110,10 +132,10 @@ class GameController extends Controller
       Player::reguard();
       $roomToStart->update(['state' => 2]);
       broadcast(new GameStateUpdated(Room::where('id',$roomId)->first()))->toOthers();
-      
+
     }
 
-    public function deletePlayer(Request $request, $roomId){            
+    public function deletePlayer(Request $request, $roomId){
       return Player::where('id', $request['playerId'])->delete();
     }
 

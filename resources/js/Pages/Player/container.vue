@@ -2,21 +2,22 @@
     <app-layout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                <room-selection 
-                    v-if="currentRoom.id" 
-                    :rooms="Rooms" 
-                    :currentRoom="currentRoom" 
+                <room-selection
+                    v-if="currentRoom.id"
+                    :rooms="Rooms"
+                    :currentRoom="currentRoom"
                     v-on:roomchanged="setRoom($event)"
+                    @click="getRooms"
                 />
 
 
             </h2>
 
-           
+
 
         </template>
 
-            <identity-display 
+            <identity-display
                 :identity="identity"
             />
     </app-layout>
@@ -27,7 +28,7 @@
     import RoomSelection from './roomSelection.vue'
     import Game from './game.vue'
     import IdentityDisplay from './identityDisplay.vue'
-    
+
     export default {
         components:{
             AppLayout,
@@ -54,41 +55,54 @@
         methods:{
             connect(){
                 if(this.currentRoom.id){
-                    let vm = this;
-                    window.Echo.private("game."+this.currentRoom.id).listen('.game.confirm', e => {
-                        this.gameStage = 1;
-                        axios.post('/game/room/'+this.currentRoom.id+'/confirmSelf');
-                    });
-                    window.Echo.private("game."+this.currentRoom.id).listen('.game.started', e => {
-                        this.gameStage = 2;
-                        axios.get('/game/room/'+ this.currentRoom.id +'/identity').then(response => {
-                            this.identity = response.data;
-                        }).catch(error => {console.log(error);})
-                    });
+                    //this.lobby(0);
+
                 }
             },
+            lobby(state){
+                let vm = this
+                if (state === 1){
+                    vm.getIdentity();
+                    return;
+                }
+                var url = '/game/room/'+ this.currentRoom.id +'/lobby';
+                axios.get(url).then(response => {
+                    console.log(response);
+                    setTimeout(function () {
+                        vm.lobby(response.data);
+                    }, 5000);
+                }).catch(error => {console.log(error);})
+            },
+            getIdentity(){
+                let vm = this;
+                var url = '/game/room/'+ this.currentRoom.id +'/identity';
+                axios.get(url).then(response => {
+                    this.identity = response.data;
+                }).catch(error => {console.log(error);})
+            },
             disconnect(room){
-                window.Echo.leave("game."+room.id);
+                axios.post('/game/room/'+room.id+'/deleteSelf');
             },
             getRooms(){
                 axios.get('/game/rooms')
                 .then( response =>{
                     this.Rooms = response.data;
-                    this.setRoom(response.data[0]);                    
+                    this.setRoom(response.data[0]);
                 })
                 .catch( error => {
                     console.log(error);
                 })
             },
             setRoom( room){
-                this.currentRoom = room;    
-                axios.post('/game/room/'+ room.id +'/join');            
+                this.currentRoom = room;
+                axios.post('/game/room/'+ room.id +'/join');
             },
         },
         created(){
-            this.getRooms();
-            
-            
+            let vm =this;
+            vm.getRooms();
+            vm.lobby(0);
+
         }
     }
 </script>
